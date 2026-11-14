@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Moves the fork's patch stack (branch `personal`) onto a newer upstream
 # release tag. See FORK.md → "Updating to a new upstream release".
+# Run by an agent, which must then do FORK.md → "Review the update".
 #
 #   fork/update.sh [--skip-baseline] [vX.Y.Z]   update (default: newest release)
 #   fork/update.sh --verify                     after resolving conflicts and
@@ -59,10 +60,12 @@ verify() {
   if fork/check.sh; then
     rm -f "$STATE_FILE"
     echo
-    echo "Update to $new_base done. Next (FORK.md → After the update):"
-    echo "  - read the range-diff above"
-    echo "  - update 'Based on' and 'Last verified on' in PATCHES.md (squash into the patch commits)"
-    echo "  - build and smoke-test, then: git push --force-with-lease origin $BRANCH"
+    echo "Rebase onto $new_base done and checks pass. This is NOT the end of the update."
+    echo "Next (FORK.md → Review the update), required even with no conflicts:"
+    echo "  - read the range-diff above and upstream's changes around every patch hook"
+    echo "  - read upstream's release notes; run npm run test:unit, npm run lint"
+    echo "  - fork/build.sh --adhoc --skip-install-deps"
+    echo "  - update PATCHES.md and the patch records, then report to the person"
   else
     echo
     echo "Checks failed after the update. Fix them in the owning patch's commit"

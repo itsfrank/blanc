@@ -11,6 +11,7 @@ the update runbook are in [`FORK.md`](FORK.md).
 | ID | Patch | Upstream files touched | Checks | Upstream status | Remove when | Last verified on |
 |---|---|---|---|---|---|---|
 | [0000](fork/patches/0000-fork-scaffolding.md) | Fork scaffolding: these docs, the update script, and a pointer in the agent files | `AGENTS.md`, `CLAUDE.md` (one block at the top of each) | `0000-fork-scaffolding.check.sh` | Fork-only, never proposed | Never (the fork's own tooling) | `v1.49.0` |
+| [0001](fork/patches/0001-local-builds.md) | Local builds: auto-update off, personal signing, no notarization or provisioning profile, dark Sunrise Spectrum app icon | `src/main/updater-policy.js` (one line) | `0001-local-builds.check.sh`, `fork/test/0001-local-builds.test.js` | Fork-only, never proposed | Never, while the fork is built locally | `v1.49.0` |
 
 ## Retired
 

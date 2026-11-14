@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- fork(0001): upstream's build/entitlements.mac.inherit.plist plus
+       disable-library-validation (see fork/build/entitlements.mac.plist). -->
+  <!-- Keep Electron helper processes compatible with the hardened runtime. -->
+  <key>com.apple.security.cs.allow-jit</key>
+  <true/>
+  <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+  <true/>
+  <!-- Chromium captures web media in helper processes, so the ordinary
+       hardened helpers need the same device capabilities as the main app. -->
+  <key>com.apple.security.device.audio-input</key>
+  <true/>
+  <key>com.apple.security.device.camera</key>
+  <true/>
+  <!-- fork(0001): a self-signed or ad-hoc signature has no Apple Team ID, so
+       under the hardened runtime macOS refuses to load the app's own Electron
+       framework ("different Team IDs"). Turning off library validation keeps
+       the hardened runtime's other protections. -->
+  <key>com.apple.security.cs.disable-library-validation</key>
+  <true/>
+</dict>
+</plist>

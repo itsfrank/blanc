@@ -47,6 +47,7 @@ function resolveUpdaterPolicy({
   isPackaged, env = process.env, platform = process.platform, isFlatpak = insideFlatpak,
 } = {}) {
   if (!isPackaged) return disabled('development builds do not self-update');
+  const personal = require('./fork/personal-build').personalBuildPolicy(disabled); if (personal) return personal; // fork(0001)
   const channel = String(env.BLANC_UPDATE_CHANNEL || '').trim();
   if (!channel) return production();
   if (channel === FLATPAK_CHANNEL && platform === 'linux' && isFlatpak()) {

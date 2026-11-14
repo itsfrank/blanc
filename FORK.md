@@ -12,6 +12,33 @@ the code works, but where they conflict with this file, follow this file.
 
 Read [`PATCHES.md`](PATCHES.md) next. It lists every patch this fork carries.
 
+## Asking the user to run a command
+
+When an agent needs the person to run a command (for example signing with
+the personal certificate, or launching the app, which agent sandboxes can't
+do), it must make the command one click to run where possible:
+
+- **In T3 Code**, write it as a complete fenced code block with the language
+  `sh` (or `bash`/`zsh`). T3 Code then shows a **Run in terminal** (play)
+  button, which runs it in a T3 terminal at the project root, or at the
+  thread's worktree when there is one. For the button to appear:
+  - the fence language is `sh`, `bash`, `zsh`, `fish`, `shell`, `powershell` or `pwsh`;
+  - the block is a single command or `&&`/`;` chain, with **no line ending in
+    `\`** (use one long line, or a few separate lines, instead);
+  - it has no control or invisible characters;
+  - paths are relative to the repository root (that's where it runs), or
+    absolute.
+  Put each independent step in its own block, so each gets its own button.
+- **Anywhere else**, a plain fenced code block with `sh` is fine.
+- **Never chain an update with a build or install** (`fork/update.sh &&
+  fork/build.sh …`): an update needs an agent's review first (see Updating).
+- **Never tell the person to open a built `Blanc.app` directly** (Finder,
+  `open`, Spotlight). It shares the installed app's ID and would use the real
+  profile; test builds go through `fork/test-launch.sh`.
+
+Say before the block what it does and what to expect, and ask for the output
+if it fails.
+
 ## Layout
 
 | Path | What it is |
@@ -23,9 +50,16 @@ Read [`PATCHES.md`](PATCHES.md) next. It lists every patch this fork carries.
 | `fork/patches/TEMPLATE.md` | Template for a new patch file |
 | `fork/update.sh` | Moves the patch stack onto a newer upstream release |
 | `fork/check.sh` | Runs every patch's checks |
+| `fork/build.sh`, `fork/install.sh`, `fork/test-launch.sh` | Build, install, and test-launch with a throwaway profile (patch 0001) |
+| `fork/build/` | Fork-only electron-builder config, entitlements and hooks (patch 0001) |
+| `fork/test/` | Unit tests for the fork's patches (`node --test fork/test/*.test.js`) |
+| `src/main/fork/` | Fork-only app code; upstream files only call into it |
 
-Fork-only files live at the root (`FORK.md`, `PATCHES.md`) and under `fork/`,
-which upstream does not use, so they never conflict.
+Fork-only files live at the root (`FORK.md`, `PATCHES.md`), under `fork/` and
+under `src/main/fork/`, which upstream does not use, so they never conflict.
+Build output goes to `dist-local-personal.noindex/`, which upstream's
+`.gitignore` already ignores (`dist-local*`); `.noindex` keeps Spotlight
+from offering the built app.
 
 ## Git setup
 
@@ -117,7 +151,18 @@ published, non-draft GitHub release), never upstream `main` and never
 pre-releases. Update once per release; small, frequent updates have small
 conflicts.
 
-### Run it
+**An update is always done by an agent, never by running the script alone.**
+A rebase with no conflicts can still break a patch: git only checks that
+lines don't overlap, so it can't see upstream renaming a function a patch
+calls, moving the behaviour a patch hooks, or shipping the patch's feature.
+Passing checks are necessary but not sufficient. So the person asks an
+agent, for example:
+
+> Update the fork to the latest upstream release, following FORK.md.
+
+and builds and installs only after the agent's review is done (below).
+
+### Run it (agents)
 
 ```sh
 fork/update.sh            # move onto the newest published release
@@ -157,7 +202,7 @@ For each conflicted file:
 5. Note anything non-obvious in the patch's record under "Known conflicts".
 
 An agent resolves conflicts and fixes failing checks on its own, in a loop
-(fix, re-run checks) until everything passes. It **stops and asks** only when:
+(fix, re-run checks) until everything passes, then does the review below. It **stops and asks** only when:
 
 - upstream shipped the patch's feature, or something that overlaps it, so
   the patch may no longer be needed (check its removal condition);
@@ -166,31 +211,186 @@ An agent resolves conflicts and fixes failing checks on its own, in a loop
 - checks still fail after several real attempts at a fix;
 - a fix would need a change outside the patch's scope.
 
-### After the update
+### Review the update (agents, required even with no conflicts)
 
-1. Read the `range-diff` output: each patch should change only where upstream
+Before telling the person the update is ready:
+
+1. **Read the `range-diff`.** Each patch should change only where upstream
    forced it to.
-2. `fork/check.sh` passes.
-3. Update the "Based on" line in `PATCHES.md`, and the "Last verified on"
-   column for each patch, in the patch's own commit (squash with
-   `--fixup`), or in patch 0000's commit for the "Based on" line.
-4. Build, install and smoke-test (see Local builds).
-5. Push: `git push --force-with-lease origin personal`. The rebase rewrites
+2. **Read upstream's changes around every hook.** For each file in a
+   patch's "Hooks into upstream files" table:
+   `git log -p <old>..<new> -- <file>`. Look for anything that changes what
+   the hook relies on: renamed or moved functions, changed signatures, the
+   same behaviour now handled elsewhere, a new code path that bypasses the
+   hook.
+3. **Read upstream's release notes** (`gh release view <new> -R bnfy/blanc`,
+   and `docs/press/release-notes/` in the new tag) for features that overlap
+   a patch or meet its removal condition.
+4. **Run the checks:** `fork/check.sh`, the patch's own tests, and
+   `npm run test:unit` and `npm run lint` (upstream's suite, to catch an
+   upstream change that a patch breaks).
+5. **Build:** `fork/build.sh --adhoc --skip-install-deps`. This runs every
+   packaged-app verification.
+6. **Update the records:** "Based on" in `PATCHES.md` (in patch 0000's
+   commit), each patch's "Last verified on" and any "Known conflicts" (in that
+   patch's commit, squashed with `--fixup`).
+7. **Report to the person:** the new release, what upstream changed that
+   touches the patches, what was adapted and why, anything that needs their
+   decision, and what to check by hand in the app. Then give them the build
+   and install block (see Local builds).
+
+### After the review (the person)
+
+1. Build and install: `fork/build.sh && fork/install.sh`, in one block.
+2. Use the app and check what the agent's report lists.
+3. Push (the agent can do this once you confirm):
+   `git push --force-with-lease origin personal`. The rebase rewrites
    history, so a plain push is refused; `--force-with-lease` refuses to
    overwrite anything you haven't seen.
-6. Backup tags are local only. Delete old ones when the new build has been
+4. Backup tags are local only. Delete old ones when the new build has been
    used for a while: `git tag -l 'fork-backup/*'`, `git tag -d <tag>`.
 
 To abandon an update: `git rebase --abort`, or
 `git reset --hard fork-backup/<tag>` after it finished.
 
+## Setting up another Mac
+
+1. Install Git / Apple's Command Line Tools (`xcode-select --install` if
+   missing), Node.js with npm, and authenticate Git access to the fork.
+   The current build script targets Apple Silicon (`--arm64`).
+2. Clone `https://github.com/itsfrank/blanc.git` and check out `personal`.
+   Add the fetch-only upstream remote and apply every local Git setting in
+   **Git setup** above. Run `git fetch upstream --tags` so the checks can
+   identify the release base. Keep GitHub Actions disabled. Create the
+   untracked private-words file (FORK.md rule 5) with the words to keep out,
+   one extended regex per line; copy it from another clone rather than
+   writing the list anywhere tracked:
+   `$(git rev-parse --git-common-dir)/info/fork-private-words`.
+3. Configure signing using **Per-machine signing** below: either import an
+   existing encrypted .p12 (including its private key), or create a separate
+   Code Signing certificate on this Mac. For a separate certificate, select
+   its fingerprint with `git config --local blanc.signingIdentity <SHA1>`.
+   Build and install both use this selection. A certificate's display name
+   alone is not sufficient.
+4. Export a password-protected .p12 backup including the private key; the
+   convention on each Mac is `~/blanc-cert-backup/Certificates.p12`. Each
+   machine's file may contain a different certificate. Store the password
+   separately and keep both out of Git. `~` refers to the current Mac's user.
+5. Install dependencies and run the fork checks:
+
+   ```sh
+   npm ci --no-audit --no-fund && fork/check.sh
+   ```
+
+6. If Blanc already has a profile here, quit it and back up
+   `~/Library/Application Support/Blanc` before replacing the app. The fork
+   shares the official app's ID and profile; a different signer can require
+   Keychain approval. A Git clone and a signing certificate do not transfer
+   browser data between Macs.
+7. Build and install in your own Terminal:
+
+   ```sh
+   fork/build.sh && fork/install.sh
+   ```
+
+8. Check browsing, the dark Spectrum icon, the disabled updater message, and
+   **Settings → Personal fork**. Configure machine-specific settings such as
+   the go-link address locally. Never commit work hosts or credentials.
+
+### Keeping two laptops in sync
+
+Before working, commit or otherwise preserve local changes, then fetch:
+
+```sh
+git fetch origin --tags
+```
+
+With a clean tree, if `personal` is only behind `origin/personal`, use
+`git merge --ff-only origin/personal`. If they diverge, ask an agent to compare
+`git log --left-right --oneline personal...origin/personal` before integrating.
+Updates and squashed patch fixes rewrite history: do not use a blind pull,
+reset, or force push to resolve divergence. Preserve unpublished patches first.
+The Git signing setting is clone-local and does not move between laptops.
+Rebuild and install after integrating changes; the installed app does not
+update itself. Follow the agent-reviewed upstream-update procedure above for
+new upstream releases, not a merge of upstream main.
+
 ## Local builds
 
-Not set up yet. A later patch will make local builds work: auto-update off,
-signing with the self-signed "Blanc Personal Signing" certificate instead of
-the owner's Developer ID, no notarization, and no provisioning profile (so no
-Touch ID passkeys). Until that patch exists, don't run `npm run dist`; it
-expects the owner's signing identity and fails.
+Set up by patch 0001 ([record](fork/patches/0001-local-builds.md)). Never run
+`npm run dist`, `npm run dist:dir` or `npm run release`: they expect the
+owner's signing identity and fail.
+
+**Build and install (in your own Terminal):**
+
+```sh
+fork/build.sh      # npm ci, build, verify → dist-local-personal.noindex/mac-arm64/Blanc.app
+fork/install.sh    # quit Blanc, install to /Applications, relaunch
+```
+
+`fork/install.sh` replaces the installed app and keeps no old copy (a second
+`Blanc.app` with the same app ID could be opened against the real profile by
+mistake). To roll back, check out an earlier commit or backup tag and build
+and install again. Your profile (`~/Library/Application Support/Blanc`) is
+never touched.
+
+**Agents** can't use the signing certificate (their sandbox can't see the
+login keychain), and can't launch the app (the sandbox blocks Chromium's Mach
+port registration). They can do everything else:
+
+```sh
+fork/build.sh --adhoc --skip-install-deps   # same build, ad-hoc signature
+fork/check.sh                               # every patch's checks
+```
+
+An ad-hoc build is for testing only: `fork/install.sh` refuses it, because
+it would lose access to the "Blanc Safe Storage" Keychain item. To test-launch
+any build without touching your profile, quit your Blanc and run in your own
+Terminal (it refuses while Blanc is running, since two copies must never share
+a profile):
+
+```sh
+fork/test-launch.sh
+```
+
+**What a personal build gives up:** Touch ID passkeys, protected playback
+(Netflix, Spotify), the glass Icon Composer icons, and library validation.
+Details and reasons are in the patch record.
+
+**Per-machine signing:** build and install select the same SHA-1 fingerprint:
+`BLANC_FORK_IDENTITY` environment override, then clone-local Git setting
+`blanc.signingIdentity`, then the original certificate below. Only fingerprints
+are accepted (or `-` for test builds); the installer always refuses ad-hoc
+signatures and mismatched certificates. No private key is stored in Git.
+
+To create a separate certificate on another Mac, open Keychain Access →
+Certificate Assistant → Create a Certificate. Use a distinctive name such as
+"Blanc Personal Signing - Personal Laptop", Identity Type **Self Signed Root**
+and Certificate Type **Code Signing**. Store it in the login keychain, set its
+Code Signing trust to **Always Trust**, and verify it appears in
+`security find-identity -v -p codesigning`. Select its 40-character fingerprint
+once per clone (replace the placeholder):
+
+```sh
+git config --local blanc.signingIdentity YOUR_40_CHARACTER_SHA1
+```
+
+The setting stays in `.git/config`, is never pushed, and survives rebases.
+Keep the certificate and private key in this Mac's login keychain; export an
+encrypted .p12 backup somewhere secure. Replacing the signer on an existing
+profile may require Keychain approval and can affect encrypted-data access;
+back up the profile first. Do not delete or reset "Blanc Safe Storage" to
+silence an access failure.
+
+**Original signing certificate:** "Blanc Personal Signing", self-signed, in the login
+keychain, SHA-1 `4C8D41463A1DF570CF9DADABD28CC4AD8DDE5C5D`, trusted for Code
+Signing. **Backup on the fork owner's Mac:** `~/blanc-cert-backup/`
+(`Certificates.p12`, password-protected; the password is not stored in this
+repository). To restore it after a Mac reset or a lost login keychain,
+double-click the `.p12`, then set Code Signing to **Always Trust** for it in
+Keychain Access. Restoring the same certificate keeps the same fingerprint, so
+Blanc keeps access to "Blanc Safe Storage". Recreating it instead changes the
+fingerprint; see the patch record.
 
 ## Sources for these practices
 
