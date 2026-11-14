@@ -1,5 +1,14 @@
 # CLAUDE.md
 
+> [!IMPORTANT]
+> **Personal fork. Read [`FORK.md`](FORK.md) before anything else.**
+> This checkout is `itsfrank/blanc`, a personal patched fork of `bnfy/blanc`
+> that is never distributed. You MUST read `FORK.md` and `PATCHES.md` before
+> reading further, editing files or running commands. Where `FORK.md` and this
+> file disagree, `FORK.md` wins. The release, publishing, website and
+> marketing instructions below do not apply to this fork.
+<!-- fork(0000): this block is the fork's only change to this file. -->
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## What this is
