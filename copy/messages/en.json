@@ -10132,5 +10132,30 @@
   "favorites.import.tabsSkipped": {
     "message": "Open tabs weren’t brought over.",
     "note": "Favorites page → Bring my stuff to Blanc: added after the result when Open tabs was ticked but the favorites import was cancelled or failed, so Blanc did not go on to Bring Your Tabs."
+  },
+  "fork.settings.title": {
+    "message": "Personal fork",
+    "note": "Settings: title of the section that holds this personal build's own settings. Also the sidebar link.",
+    "maxLength": 24
+  },
+  "fork.settings.intro": {
+    "message": "Settings added by this personal build of Blanc. They aren't part of official Blanc.",
+    "note": "Settings → Personal fork: one-line explanation at the top of the section."
+  },
+  "fork.settings.goLinks.title": {
+    "message": "Go links",
+    "note": "Settings → Personal fork: card title. Go links are short internal links typed as go/name."
+  },
+  "fork.settings.goLinkTemplate.label": {
+    "message": "Go link address",
+    "note": "Settings → Personal fork: setting name."
+  },
+  "fork.settings.goLinkTemplate.hint": {
+    "message": "Paste the address your go links open, with %s where the link name goes, for example https://example.glean.com/go/%s. Then go/name typed in the Island, and links to go/name, open there. Leave empty to turn go links off. Only on this device.",
+    "note": "Settings → Personal fork: explanation under a setting. Keep %s, go/name and the example address exactly as written."
+  },
+  "fork.settings.goLinkTemplate.error": {
+    "message": "That address isn't valid. It needs https:// and exactly one %s. Your previous go link address is still in use.",
+    "note": "Settings → Personal fork: error shown when the go link address is invalid. Keep https:// and %s exactly as written."
   }
 }

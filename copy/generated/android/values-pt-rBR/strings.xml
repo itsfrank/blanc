@@ -2792,4 +2792,10 @@ Você pode tentar de novo com “%2$s” ou reinstalar a partir de blanc.day.</s
     <string name="favorites_import_cancel">Cancelar</string>
     <string name="favorites_manager_delete_folder_label">Excluir a pasta %1$s</string>
     <string name="favorites_import_tabs_skipped">As abas abertas não foram trazidas.</string>
+    <string name="fork_settings_title">Fork pessoal</string>
+    <string name="fork_settings_intro">Ajustes adicionados por esta versão pessoal do Blanc. Eles não fazem parte do Blanc oficial.</string>
+    <string name="fork_settings_go_links_title">Links go</string>
+    <string name="fork_settings_go_link_template_label">Endereço dos links go</string>
+    <string name="fork_settings_go_link_template_hint">Cole o endereço que seus links go abrem, com %%s onde fica o nome do link, por exemplo https://example.glean.com/go/%%s. Assim, go/name digitado na Island e links para go/name abrem nesse endereço. Deixe vazio para desativar os links go. Só neste dispositivo.</string>
+    <string name="fork_settings_go_link_template_error">Esse endereço não é válido. Ele precisa de https:// e exatamente um %%s. Seu endereço de links go anterior continua em uso.</string>
 </resources>

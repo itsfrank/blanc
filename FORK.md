@@ -53,7 +53,9 @@ if it fails.
 | `fork/build.sh`, `fork/install.sh`, `fork/test-launch.sh` | Build, install, and test-launch with a throwaway profile (patch 0001) |
 | `fork/build/` | Fork-only electron-builder config, entitlements and hooks (patch 0001) |
 | `fork/test/` | Unit tests for the fork's patches (`node --test fork/test/*.test.js`) |
+| `fork/test/desktop/` | End-to-end tests in the dev app, run by the person (see Testing a change) |
 | `src/main/fork/` | Fork-only app code; upstream files only call into it |
+| `src/renderer/pages/fork-settings.js` | The **Settings → Personal fork** section (see Adding a fork setting) |
 
 Fork-only files live at the root (`FORK.md`, `PATCHES.md`), under `fork/` and
 under `src/main/fork/`, which upstream does not use, so they never conflict.
@@ -128,6 +130,75 @@ the owner's secrets and runners; don't turn them on.
 7. **Respect upstream's licensing.** The code is MIT, but the Blanc name and
    marks are reserved (`ASSET-LICENSE.md`). That is fine for personal use; it
    is one of the reasons this fork is never distributed.
+
+## Testing a change
+
+| Check | Who runs it | When |
+|---|---|---|
+| `node --test fork/test/*.test.js`, `npm run test:unit`, `npm run lint`, `fork/check.sh` | agent | every change |
+| `fork/build.sh --adhoc --skip-install-deps` | agent | changes to packaging or the build |
+| `node fork/test/desktop/run.mjs` | **the person** | every change to how the app behaves |
+| `npm start` | the person | trying a change by hand |
+| `fork/build.sh && fork/install.sh` | the person | once a change is ready to use day to day |
+
+**Agents must not start the app from their sandbox.** That covers `npm start`,
+`electron .`, `fork/test/desktop/*` and any built `Blanc.app`. The agent
+sandbox blocks Chromium's Mach port registration, so the app crashes at once
+and the person gets a macOS "quit unexpectedly" dialog for every attempt.
+Give the person the command instead, then read the results yourself.
+
+**End-to-end tests** (`fork/test/desktop/NNNN-<slug>-smoke.mjs`) launch the
+dev app with Playwright, `BLANC_TEST=1` and a throwaway profile, through
+upstream's test hook (`src/main/test-hook.js`). They never touch the real
+profile and can run while the installed Blanc is open. `run.mjs` runs them
+all (`run.mjs 0002` runs one). Each test writes its result as JSON to the
+system temp folder (`$TMPDIR`, not `/tmp`):
+`$TMPDIR/blanc-fork-<id>-…-smoke.json`, and the summary to
+`$TMPDIR/blanc-fork-desktop-tests.json`.
+
+Writing one: copy `0002-go-links-smoke.mjs`.
+- **Seed the settings before launch:** write `<profile>-Dev/settings.json`
+  (first run done, plus the feature's own settings), so most checks don't
+  depend on the Settings UI. Check the UI in its own step.
+- **Wait for startup** with `__blanc.startupReady()` before driving the app.
+- **Type through the real Island input** (`editAddressInput`,
+  `pressAddressKey`), with `captureSearchNavigation` to record where Enter
+  would go.
+- **Serve pages from a local HTTP server.** Nothing may leave the machine.
+
+Every patch that changes how the app behaves should have one.
+
+## Adding a fork setting
+
+Fork settings live in their own **Settings → Personal fork** section at the
+bottom of Settings, never among upstream's. Patch 0002 added the hooks;
+a new setting adds **no new hook to upstream code**, only data:
+
+1. **Main process:** an entry in `FORK_SETTINGS` in
+   `src/main/fork/settings.js`: `default`, `valid(value)` (decides both
+   reads and writes) and optional `normalize(value)`. Upstream's
+   `src/main/settings.js` picks it up through its three `fork(0002)` hooks.
+2. **Settings UI:** an entry in a card in `CARDS` in
+   `src/renderer/pages/fork-settings.js` (a new card for a new feature).
+   Add a builder there if the setting needs a new control type (only `url`
+   exists so far).
+3. **Strings:** `fork.settings.<feature>.*` keys in
+   `copy/messages/en.json` (each with a `note`), and the same keys in every
+   other `copy/messages/*.json`. Then:
+   `npm run copy:ack -- <locale> <keys…>` for each translation, and
+   `npm run copy:build`. Every selectable language must be complete or
+   `copy:check` fails.
+4. **Schema:** the key in `internalDefaults` in
+   `settings-schema/schema.json` (desktop-only; no mobile codegen). This is
+   the one per-setting edit to an upstream file.
+5. **Use it** from the patch's own module with
+   `settings.getSettings().<key>`, read at the time of use so changes in
+   Settings apply at once.
+6. **Tests:** `fork/test/0002-go-links.test.js` already fails if a fork
+   setting has no UI entry, a missing translation or no schema key.
+
+Keep work-specific values (hosts, accounts) out of defaults, placeholders and
+tests; use `example.…` names.
 
 ## What does not apply here
 
@@ -231,9 +302,10 @@ Before telling the person the update is ready:
    upstream change that a patch breaks).
 5. **Build:** `fork/build.sh --adhoc --skip-install-deps`. This runs every
    packaged-app verification.
-6. **Update the records:** "Based on" in `PATCHES.md` (in patch 0000's
-   commit), each patch's "Last verified on" and any "Known conflicts" (in that
-   patch's commit, squashed with `--fixup`).
+6. **Update the records:** "Based on" and every "Last verified on" in
+   `PATCHES.md`, and any "Known conflicts" in a patch's record. `PATCHES.md`
+   is edited by every patch, so squash its changes into the **newest** patch
+   commit (`--fixup` into an older one conflicts with the later patches' rows).
 7. **Report to the person:** the new release, what upstream changed that
    touches the patches, what was adapted and why, anything that needs their
    decision, and what to check by hand in the app. Then give them the build

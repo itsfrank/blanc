@@ -110886,6 +110886,258 @@
           }
         }
       }
+    },
+    "fork.settings.title": {
+      "comment": "Settings: title of the section that holds this personal build's own settings. Also the sidebar link.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personal fork"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persönlicher Fork"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fork personal"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fork personnel"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fork personale"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fork pessoal"
+          }
+        }
+      }
+    },
+    "fork.settings.intro": {
+      "comment": "Settings → Personal fork: one-line explanation at the top of the section.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings added by this personal build of Blanc. They aren't part of official Blanc."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einstellungen dieses persönlichen Blanc-Builds. Sie sind nicht Teil des offiziellen Blanc."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajustes que añade esta versión personal de Blanc. No forman parte de Blanc oficial."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réglages ajoutés par cette version personnelle de Blanc. Ils ne font pas partie de Blanc officiel."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impostazioni aggiunte da questa versione personale di Blanc. Non fanno parte di Blanc ufficiale."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajustes adicionados por esta versão pessoal do Blanc. Eles não fazem parte do Blanc oficial."
+          }
+        }
+      }
+    },
+    "fork.settings.goLinks.title": {
+      "comment": "Settings → Personal fork: card title. Go links are short internal links typed as go/name.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go links"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go-Links"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enlaces go"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liens go"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Link go"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Links go"
+          }
+        }
+      }
+    },
+    "fork.settings.goLinkTemplate.label": {
+      "comment": "Settings → Personal fork: setting name.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go link address"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go-Link-Adresse"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dirección de enlaces go"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adresse des liens go"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indirizzo dei link go"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Endereço dos links go"
+          }
+        }
+      }
+    },
+    "fork.settings.goLinkTemplate.hint": {
+      "comment": "Settings → Personal fork: explanation under a setting. Keep %s, go/name and the example address exactly as written.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paste the address your go links open, with %%s where the link name goes, for example https://example.glean.com/go/%%s. Then go/name typed in the Island, and links to go/name, open there. Leave empty to turn go links off. Only on this device."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Füge die Adresse ein, die deine Go-Links öffnen, mit %%s an der Stelle des Linknamens, zum Beispiel https://example.glean.com/go/%%s. Dann öffnen sich go/name in der Island und Links auf go/name dort. Leer lassen, um Go-Links auszuschalten. Nur auf diesem Gerät."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pega la dirección que abren tus enlaces go, con %%s donde va el nombre del enlace, por ejemplo https://example.glean.com/go/%%s. Así go/name escrito en la Island y los enlaces a go/name se abren ahí. Déjala vacía para desactivar los enlaces go. Solo en este dispositivo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collez l’adresse qu’ouvrent vos liens go, avec %%s à la place du nom du lien, par exemple https://example.glean.com/go/%%s. go/name saisi dans l’Island et les liens vers go/name s’ouvrent alors à cette adresse. Laissez vide pour désactiver les liens go. Sur cet appareil uniquement."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incolla l’indirizzo che aprono i tuoi link go, con %%s al posto del nome del link, per esempio https://example.glean.com/go/%%s. Così go/name digitato nell’Island e i link a go/name si aprono lì. Lascia vuoto per disattivare i link go. Solo su questo dispositivo."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cole o endereço que seus links go abrem, com %%s onde fica o nome do link, por exemplo https://example.glean.com/go/%%s. Assim, go/name digitado na Island e links para go/name abrem nesse endereço. Deixe vazio para desativar os links go. Só neste dispositivo."
+          }
+        }
+      }
+    },
+    "fork.settings.goLinkTemplate.error": {
+      "comment": "Settings → Personal fork: error shown when the go link address is invalid. Keep https:// and %s exactly as written.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That address isn't valid. It needs https:// and exactly one %%s. Your previous go link address is still in use."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Adresse ist ungültig. Sie braucht https:// und genau ein %%s. Deine bisherige Go-Link-Adresse bleibt in Gebrauch."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esa dirección no es válida. Necesita https:// y exactamente un %%s. Se sigue usando tu dirección de enlaces go anterior."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette adresse n’est pas valide. Il faut https:// et exactement un %%s. Votre adresse de liens go précédente reste utilisée."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo indirizzo non è valido. Servono https:// ed esattamente un %%s. Resta in uso il tuo indirizzo dei link go precedente."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esse endereço não é válido. Ele precisa de https:// e exatamente um %%s. Seu endereço de links go anterior continua em uso."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

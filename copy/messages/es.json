@@ -9850,5 +9850,29 @@
   "favorites.import.tabsSkipped": {
     "message": "No se trajeron las pestañas abiertas.",
     "source": "sha256:2151e2cc32789e69ff84dc7e3125d6a0221be22bf0d122a82c7f3a2f6b2da94f"
+  },
+  "fork.settings.title": {
+    "message": "Fork personal",
+    "source": "sha256:dd5b09c6ce9679e405d295df17f1cfd8726101e886f3c4ffcbf894c8bf803a1d"
+  },
+  "fork.settings.intro": {
+    "message": "Ajustes que añade esta versión personal de Blanc. No forman parte de Blanc oficial.",
+    "source": "sha256:04320f8efcb8915f4fa49ee3e00db3c5d8c833442c45c5eef06709a4a2a557c2"
+  },
+  "fork.settings.goLinks.title": {
+    "message": "Enlaces go",
+    "source": "sha256:43c854353f39f4f96bbd5b48e04486c65665c57875a61e3c38f7ddb4dd12d8ad"
+  },
+  "fork.settings.goLinkTemplate.label": {
+    "message": "Dirección de enlaces go",
+    "source": "sha256:868047a7e2985dd3eec8e24b200efa6e260c2f32266cde73c360a5609067d465"
+  },
+  "fork.settings.goLinkTemplate.hint": {
+    "message": "Pega la dirección que abren tus enlaces go, con %s donde va el nombre del enlace, por ejemplo https://example.glean.com/go/%s. Así go/name escrito en la Island y los enlaces a go/name se abren ahí. Déjala vacía para desactivar los enlaces go. Solo en este dispositivo.",
+    "source": "sha256:4d45c936cc64c46f621c8e4eb9398da7a94385602d209a4b08d366cadf3e6279"
+  },
+  "fork.settings.goLinkTemplate.error": {
+    "message": "Esa dirección no es válida. Necesita https:// y exactamente un %s. Se sigue usando tu dirección de enlaces go anterior.",
+    "source": "sha256:f7699beb9ff08828f1d3c56cb33f26f78025a39a50f01f4d0d411fa28ec26721"
   }
 }

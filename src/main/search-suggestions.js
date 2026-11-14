@@ -60,6 +60,7 @@ function normalizeQuery(input) {
 function isSuggestionEligible(input) {
   const query = normalizeQuery(input);
   if (!query || query.startsWith('/') || /[\r\n]/.test(query)) return false;
+  if (require('./fork/go-links').isGoLinkText(query)) return false; // fork(0002)
   if (/^[a-z][a-z0-9+.-]*:/i.test(query)) return false;
   // A leading backslash is a Windows root-relative path, UNC share, or device
   // path (for example \Windows, \\server\share, \\?\C:\, or \\.\pipe).

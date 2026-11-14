@@ -2792,4 +2792,10 @@ Vous pouvez réessayer avec « %2$s » ou réinstaller depuis blanc.day.</stri
     <string name="favorites_import_cancel">Annuler</string>
     <string name="favorites_manager_delete_folder_label">Supprimer le dossier %1$s</string>
     <string name="favorites_import_tabs_skipped">Les onglets ouverts n’ont pas été importés.</string>
+    <string name="fork_settings_title">Fork personnel</string>
+    <string name="fork_settings_intro">Réglages ajoutés par cette version personnelle de Blanc. Ils ne font pas partie de Blanc officiel.</string>
+    <string name="fork_settings_go_links_title">Liens go</string>
+    <string name="fork_settings_go_link_template_label">Adresse des liens go</string>
+    <string name="fork_settings_go_link_template_hint">Collez l’adresse qu’ouvrent vos liens go, avec %%s à la place du nom du lien, par exemple https://example.glean.com/go/%%s. go/name saisi dans l’Island et les liens vers go/name s’ouvrent alors à cette adresse. Laissez vide pour désactiver les liens go. Sur cet appareil uniquement.</string>
+    <string name="fork_settings_go_link_template_error">Cette adresse n’est pas valide. Il faut https:// et exactement un %%s. Votre adresse de liens go précédente reste utilisée.</string>
 </resources>

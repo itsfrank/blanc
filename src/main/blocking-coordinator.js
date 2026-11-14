@@ -37,6 +37,7 @@ function createBlockingCoordinator({ trace } = {}) {
           }
         };
         if (event === 'onBeforeRequest' && veto?.(details)) { traced('veto'); return respond({ cancel: true }); }
+        if (event === 'onBeforeRequest') { const forkRedirect = require('./fork/request-redirects').redirectFor(details); if (forkRedirect) return respond({ redirectURL: forkRedirect }); } // fork(0002)
         if (event === 'onBeforeRequest' && state.gate?.(details)) { traced('gate'); return respond({ cancel: true }); }
         const run = async () => {
           // Local Network Access (permissions.js localNetworkPolicyFor): null

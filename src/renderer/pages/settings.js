@@ -2809,6 +2809,7 @@
     document.getElementById('group-diagnostics')?.remove();
   }
 
+  window.blancForkSettings?.render(settings); // fork(0002)
   // --- Settings sidebar: scroll-spy + click-to-scroll ---
   (function initSettingsNav() {
     // Drop nav links whose group was removed above (unsupported on this platform).

@@ -2792,4 +2792,10 @@ Puedes reintentarlo con «%2$s» o reinstalar desde blanc.day.</string>
     <string name="favorites_import_cancel">Cancelar</string>
     <string name="favorites_manager_delete_folder_label">Eliminar la carpeta %1$s</string>
     <string name="favorites_import_tabs_skipped">No se trajeron las pestañas abiertas.</string>
+    <string name="fork_settings_title">Fork personal</string>
+    <string name="fork_settings_intro">Ajustes que añade esta versión personal de Blanc. No forman parte de Blanc oficial.</string>
+    <string name="fork_settings_go_links_title">Enlaces go</string>
+    <string name="fork_settings_go_link_template_label">Dirección de enlaces go</string>
+    <string name="fork_settings_go_link_template_hint">Pega la dirección que abren tus enlaces go, con %%s donde va el nombre del enlace, por ejemplo https://example.glean.com/go/%%s. Así go/name escrito en la Island y los enlaces a go/name se abren ahí. Déjala vacía para desactivar los enlaces go. Solo en este dispositivo.</string>
+    <string name="fork_settings_go_link_template_error">Esa dirección no es válida. Necesita https:// y exactamente un %%s. Se sigue usando tu dirección de enlaces go anterior.</string>
 </resources>

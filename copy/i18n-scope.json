@@ -380,6 +380,10 @@
     "src/renderer/pages/reader-content.js": {
       "state": "guarded",
       "allow": []
+    },
+    "src/renderer/pages/fork-settings.js": {
+      "state": "guarded",
+      "allow": []
     }
   }
 }

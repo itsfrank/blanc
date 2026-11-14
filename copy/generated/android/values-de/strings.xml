@@ -2711,4 +2711,10 @@ Versuche es erneut mit „%2$s“ oder installiere Blanc neu von blanc.day.</str
     <string name="favorites_import_cancel">Abbrechen</string>
     <string name="favorites_manager_delete_folder_label">Ordner %1$s löschen</string>
     <string name="favorites_import_tabs_skipped">Offene Tabs wurden nicht übernommen.</string>
+    <string name="fork_settings_title">Persönlicher Fork</string>
+    <string name="fork_settings_intro">Einstellungen dieses persönlichen Blanc-Builds. Sie sind nicht Teil des offiziellen Blanc.</string>
+    <string name="fork_settings_go_links_title">Go-Links</string>
+    <string name="fork_settings_go_link_template_label">Go-Link-Adresse</string>
+    <string name="fork_settings_go_link_template_hint">Füge die Adresse ein, die deine Go-Links öffnen, mit %%s an der Stelle des Linknamens, zum Beispiel https://example.glean.com/go/%%s. Dann öffnen sich go/name in der Island und Links auf go/name dort. Leer lassen, um Go-Links auszuschalten. Nur auf diesem Gerät.</string>
+    <string name="fork_settings_go_link_template_error">Diese Adresse ist ungültig. Sie braucht https:// und genau ein %%s. Deine bisherige Go-Link-Adresse bleibt in Gebrauch.</string>
 </resources>

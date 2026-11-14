@@ -2711,4 +2711,10 @@ You can retry with “%2$s”, or reinstall from blanc.day.</string>
     <string name="favorites_import_cancel">Cancel</string>
     <string name="favorites_manager_delete_folder_label">Delete folder %1$s</string>
     <string name="favorites_import_tabs_skipped">Open tabs weren’t brought over.</string>
+    <string name="fork_settings_title">Personal fork</string>
+    <string name="fork_settings_intro">Settings added by this personal build of Blanc. They aren\'t part of official Blanc.</string>
+    <string name="fork_settings_go_links_title">Go links</string>
+    <string name="fork_settings_go_link_template_label">Go link address</string>
+    <string name="fork_settings_go_link_template_hint">Paste the address your go links open, with %%s where the link name goes, for example https://example.glean.com/go/%%s. Then go/name typed in the Island, and links to go/name, open there. Leave empty to turn go links off. Only on this device.</string>
+    <string name="fork_settings_go_link_template_error">That address isn\'t valid. It needs https:// and exactly one %%s. Your previous go link address is still in use.</string>
 </resources>

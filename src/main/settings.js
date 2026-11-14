@@ -397,6 +397,7 @@ const DEFAULTS = {
   // UUID tie-breakers make equal timestamp writes converge across devices.
   // Kept separate so older clients can continue reading the numeric meta map.
   _syncTieBreakers: {},
+  ...require('./fork/settings').FORK_DEFAULTS, // fork(0002)
 };
 
 function validSyncTimestamp(value) {
@@ -628,6 +629,7 @@ function getSettings() {
       (data.searchEngine === 'custom' && !isValidSearchTemplate(data.searchEngineTemplate))) {
     data.searchEngine = DEFAULTS.searchEngine;
   }
+  require('./fork/settings').readForkSettings(data); // fork(0002)
   return data;
 }
 
@@ -749,6 +751,7 @@ function sanitize(partial) {
   if (Array.isArray(partial.darkWebsitesExceptions)) {
     clean.darkWebsitesExceptions = normalizeHostnameList(partial.darkWebsitesExceptions);
   }
+  require('./fork/settings').sanitizeForkSettings(partial, clean); // fork(0002)
   return clean;
 }
 

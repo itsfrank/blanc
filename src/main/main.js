@@ -3479,6 +3479,7 @@ function inertRequestVeto(details) {
   return !!tab?.inert && !documentPolicy.inertViewMayShow(details.url);
 }
 blockingCoordinator.setVeto(inertRequestVeto);
+require('./fork/go-links').installGoLinkRedirect(() => settings.getSettings().goLinkTemplate); // fork(0002)
 
 /** Stop allowing (certificate spec §4.5): forget the active tab's origin in
  *  its session, drop pooled connections, and reload so the warning returns.
@@ -6586,6 +6587,7 @@ function navigateTabToAddress(id, rawText, { shared = false } = {}) {
     testSearchSubmission = { engine: 'bang', code: bang.code, query: bang.query, url: bang.url };
     return;
   }
+  const goLink = bang ? null : require('./fork/go-links').rewriteTypedGoLink(rawText, () => settings.getSettings().goLinkTemplate); if (goLink) rawText = goLink; // fork(0002)
   const target = bang ? bang.url : normalizeAddressInput(rawText);
   if (testSearchNavigationCapture) {
     // The acceptance suite runs offline: record where Enter would have gone.
@@ -11830,6 +11832,7 @@ function registerIpcHandlers() {
     // A search row's text can carry a bang too (the panel shows the hint row
     // only for the typed text; a provider suggestion never contains one).
     const bang = bangResolver.resolveTyped(query, { private: tab.private });
+    if (!bang && require('./fork/go-links').rewriteTypedGoLink(query, () => settings.getSettings().goLinkTemplate)) return navigateTabToAddress(id, query); // fork(0002)
     const target = bang ? bang.url : engine.url(query.trim());
     rt().tabsWantingAddressBarFocus.delete(id);
     if (testSearchNavigationCapture) {
